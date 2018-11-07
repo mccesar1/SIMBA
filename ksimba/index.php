@@ -3,9 +3,12 @@ session_start();
 
   require 'database.php';
   if (isset($_SESSION['user_id'])) {
-    $records = $conn->prepare('SELECT id_control_acceso, nombre_usuario, contrasena FROM usuarios WHERE id_usuario = :id_usuario');
+      $pdo = Database::connect();
+    $records = $pdo->prepare('SELECT id_control_acceso, nombre_usuario, contrasena FROM usuarios WHERE id_usuario = :id_usuario');
     $records->bindParam(':id_control_acceso', $_SESSION['user_id']);
-    $records->execute();
+   $pdo->execute();
+
+
     $results = $records->fetch(PDO::FETCH_ASSOC);
 
     $user = null;
@@ -14,6 +17,7 @@ session_start();
       $user = $results;// code...
     }
   }
+    Database::disconnect();
  ?>
 
 

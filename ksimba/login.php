@@ -9,9 +9,13 @@
   }
   require 'database.php';
 
+
   if (!empty($_POST['nombre_usuario']) && !empty($_POST['contrasena'])) {
-    $records = $conn->prepare('SELECT id_control_acceso, nombre_usuario, contrasena FROM usuarios WHERE nombre_usuario = :nombre_usuario');
+      $pdo = Database::connect();
+    $records = $pdo->prepare('SELECT id_control_acceso, nombre_usuario, contrasena FROM usuarios WHERE nombre_usuario = :nombre_usuario');
+      //$sql = ('SELECT id_control_acceso, nombre_usuario, contrasena FROM usuarios WHERE nombre_usuario = :nombre_usuario');
     $records->bindParam(':nombre_usuario', $_POST['nombre_usuario']);
+    //$sql->bindParam(':nombre_usuario', $_POST['nombre_usuario']);
     $records->execute();
     $results = $records->fetch(PDO::FETCH_ASSOC);
 
@@ -43,7 +47,7 @@
       $message = 'Datos incorrectos';
     }
   }
-
+  Database::disconnect();
 ?>
 
 <!DOCTYPE html>

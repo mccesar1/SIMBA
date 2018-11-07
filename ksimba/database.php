@@ -1,15 +1,32 @@
 <?php
+class Database{
+    private static $dbName = 'becas3';
+    private static $dbHost = 'localhost' ;
+    private static $dbUsername = 'root';
+    private static $dbUserPassword = '';
 
-$server = 'localhost';//añadir el puerto si no funciona asi
-$username = 'root';
-$password = '';
-$database = 'becas3';
+    private static $cont = null;
 
-try {
-  $conn = new PDO("mysql:host=$server;dbname=$database;", $username, $password);
-} catch (PDOException $e) {
-  die('Connection Failed: ' . $e->getMessage());
+    public function __construct() {
+        die('Init function is not allowed');
+    }
+
+    public static function connect(){
+        // One connection through whole application
+        if ( null == self::$cont ) {
+            try {
+                self::$cont = new PDO( "mysql:host=".self::$dbHost.";"."dbname=".self::$dbName, self::$dbUsername, self::$dbUserPassword);
+            }
+            catch(PDOException $e)
+            {
+                die($e->getMessage());
+            }
+        }
+        return self::$cont;
+    }
+
+    public static function disconnect(){
+        self::$cont = null;
+    }
 }
-
-
- ?>
+?>
